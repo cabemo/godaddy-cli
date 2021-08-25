@@ -1,8 +1,9 @@
-package credentials
+package godaddygo
 import (
     "os/user"
     "encoding/json"
     "io/ioutil"
+    "github.com/oze4/godaddygo"
 )
 
 type Credentials struct {
@@ -10,7 +11,8 @@ type Credentials struct {
     Secret string `json:"secret"`
 }
 
-func GetCredentials() (Credentials, error) {
+// getCredentials reads the credentials files located in $HOME/.config/godaddy/credentials.json and returns a Credentials
+func getCredentials() (Credentials, error) {
     var creds Credentials
     // Get current user in order to get credentials
     user, err := user.Current()
@@ -32,4 +34,19 @@ func GetCredentials() (Credentials, error) {
     }
 
     return creds, nil
+}
+
+func GetGoDaddy() (godaddygo.V1, error) {
+    creds, err := getCredentials()
+    if err != nil {
+        return nil, err
+    }
+
+    api, err := godaddygo.NewProduction(creds.Key, creds.Secret)
+    if err != nil {
+        return nil, err
+    }
+    godaddy := api.V1()
+
+    return godaddy, nil
 }

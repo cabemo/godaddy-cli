@@ -1,12 +1,11 @@
 package main
 import (
     "context"
-    "fmt"
     "log"
     "os"
     "github.com/urfave/cli"
-    "github.com/oze4/godaddygo"
-    "github.com/Cabemo/godaddy-cli/internal/credentials"
+    "github.com/Cabemo/godaddy-cli/internal/util"
+    "github.com/Cabemo/godaddy-cli/internal/godaddygo"
 )
 
 var app = cli.NewApp()
@@ -29,25 +28,19 @@ func commands() {
                     Aliases: []string{"l","ls"},
                     Usage: "List your owned domains",
                     Action: func(c *cli.Context) {
-                        creds, err := credentials.GetCredentials()
+                        godaddy, err := godaddygo.GetGoDaddy()
+
                         if err != nil {
                             panic(err.Error())
                         }
 
-                        api, err := godaddygo.NewProduction(creds.Key, creds.Secret)
-                        if err != nil {
-                            panic(err.Error())
-                        }
-                        godaddy := api.V1()
                         domains, err := godaddy.ListDomains(context.Background())
 
                         if err != nil {
-                            log.Fatal(err)
+                            panic(err.Error())
                         }
 
-                        for _, domain := range domains {
-                            fmt.Println(domain.Domain, domain.NameServers)
-                        }
+                        util.PrintDomains(domains)
                     },
                 },
             },
