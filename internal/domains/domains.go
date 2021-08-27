@@ -9,6 +9,26 @@ import (
 	"github.com/urfave/cli"
 )
 
+// Search look for the availabilit of a domain on GoDaddy
+func Search(c *cli.Context) {
+	godaddy, err := config.GoDaddy()
+	domain := c.Args().First()
+	forTransfer := c.Bool("transfer")
+
+	if err != nil {
+		util.PrintError(err)
+	}
+
+	availability, err := godaddy.CheckAvailability(context.Background(), domain, forTransfer)
+
+	if err != nil {
+		util.PrintError(err)
+		return
+	}
+
+	util.PrintAvailability(availability)
+}
+
 // List lists all of the domains that the user has
 func List(c *cli.Context) {
 	godaddy, err := config.GoDaddy()

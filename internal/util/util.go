@@ -29,6 +29,19 @@ func PrintDomains(domains []godaddygo.DomainSummary) {
 	}
 }
 
+func PrintAvailability(availability godaddygo.DomainAvailability) {
+	dlen := len(availability.Domain)
+	plen := 5
+	price := fmt.Sprintf("%s %s", strconv.FormatFloat(float64(availability.Price)/1000000, 'f', 2, 64), availability.Currency)
+
+	if len(price) > plen {
+		plen = len(price)
+	}
+
+	fmt.Printf("%-"+strconv.Itoa(dlen)+"s\tAvailable\t%-"+strconv.Itoa(plen)+"s\tPeriod\n", "Domain", "Price")
+	fmt.Printf("%-"+strconv.Itoa(dlen)+"s\t%-9t\t%s\t%d year(s)\n", availability.Domain, availability.Available, price, availability.Period)
+}
+
 // PrintRecords prints the listed records of a domain
 func PrintRecords(records []godaddygo.Record) {
 	// Get longest name (DNS) for padding

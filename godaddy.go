@@ -27,6 +27,12 @@ func commands() {
 			Usage:   "Manage your GoDaddy domains",
 			Subcommands: []cli.Command{
 				{
+					Name:    "search",
+					Aliases: []string{"s"},
+					Usage:   "Search for the availability of a domain",
+					Action:  domains.Search,
+				},
+				{
 					Name:    "list",
 					Aliases: []string{"l", "ls"},
 					Usage:   "List your owned domains",
