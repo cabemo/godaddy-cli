@@ -31,7 +31,7 @@ func PrintDomains(domains []godaddygo.DomainSummary) {
 
 // PrintRecords prints the listed records of a domain
 func PrintRecords(records []godaddygo.Record) {
-	// Get longest godaddygo.Record.Name
+	// Get longest name (DNS) for padding
 	longestName := 0
 	for _, record := range records {
 		if len(record.Name) > longestName {
@@ -41,6 +41,11 @@ func PrintRecords(records []godaddygo.Record) {
 	for _, record := range records {
 		fmt.Printf("%-5s\t%4d\t%"+strconv.Itoa(longestName)+"s\t%s\n", record.Type, record.TTL, record.Name, record.Data)
 	}
+}
+
+// PrintRecord prints a single record with a specified message
+func PrintRecord(record godaddygo.Record, message string) {
+	fmt.Printf("%s\t%-5s\t%s\n", message, record.Type, record.Name)
 }
 
 type goDaddyError struct {
@@ -57,4 +62,40 @@ func PrintError(err error) {
 	json.Unmarshal([]byte(body), &data)
 
 	fmt.Println(data.Message)
+}
+
+/// StringToRecord takes a string and returns a oze4/godaddygo.RecordType
+func StringToRecord(r string) godaddygo.RecordType {
+	var recordType godaddygo.RecordType
+
+	switch strings.ToUpper(r) {
+	case "A":
+		recordType = godaddygo.RecordTypeA
+		break
+	case "AAAA":
+		recordType = godaddygo.RecordTypeAAAA
+		break
+	case "CNAME":
+		recordType = godaddygo.RecordTypeCNAME
+		break
+	case "MX":
+		recordType = godaddygo.RecordTypeMX
+		break
+		//						case "NS":
+		//							recordType = godaddygo.RecordTypeNS
+		//							break
+		//						case "SOA":
+		//							recordType = godaddygo.RecordTypeSOA
+		//							break
+		//						case "SRV":
+		//							recordType = godaddygo.RecordTypeSRV
+		//							break
+	case "TXT":
+		recordType = godaddygo.RecordTypeTXT
+		break
+	default:
+		recordType = godaddygo.RecordTypeA
+	}
+
+	return recordType
 }
