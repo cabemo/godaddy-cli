@@ -8,7 +8,11 @@ As an everyday maintainer of many domains I've found CLIs very useful (e.g AWS).
 
 In order to get godaddy-cli to work you need to get your [GoDaddy keys](https://developer.godaddy.com/keys) and place them in `$HOME/.config/godaddy/credentials.json`
 
-## Installation
+## Use with Docker
+
+Use this image, more detail how here: https://hub.docker.com/r/lazly/godaddy-cli
+
+## Compile
 
 ```bash
 $ git clone git@github.com/Cabemo/godaddy-cli
@@ -17,7 +21,7 @@ $ make
 $ sudo make install
 ```
 
-## Uninstall
+### Uninstall
 
 ```bash
 $ sudo make uninstall
